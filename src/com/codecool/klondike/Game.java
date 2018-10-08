@@ -184,9 +184,11 @@ public class Game extends Pane {
         //TODO
         for (Pile tableauPile : tableauPiles) {
             for (int i = 0;i <= tableauPiles.indexOf(tableauPile);i++) {
-                tableauPile.addCard(deck.get(i));
-                addMouseEventHandlers(deck.get(i));
-                getChildren().add(deck.get(i));
+                Card currentCard = deck.get(i);
+                tableauPile.addCard(currentCard);
+                addMouseEventHandlers(currentCard);
+                getChildren().add(currentCard);
+                if (i == tableauPiles.indexOf(tableauPile)) { currentCard.flip(); }
                 deck.remove(i);
             }
         }
