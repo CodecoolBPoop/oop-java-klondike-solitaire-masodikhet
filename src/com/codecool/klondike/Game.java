@@ -2,6 +2,7 @@ package com.codecool.klondike;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
@@ -78,10 +79,13 @@ public class Game extends Pane {
         if (draggedCards.isEmpty())
             return;
         Card card = (Card) e.getSource();
+        Pile SourcePile = card.getContainingPile();
         Pile pile = getValidIntersectingPile(card, tableauPiles);
         //TODO
         if (pile != null) {
             handleValidMove(card, pile);
+            ObservableList<Card> cards = SourcePile.getCards();
+            cards.get(cards.size()-2).flip();
         } else {
             draggedCards.forEach(MouseUtil::slideBack);
             draggedCards = null;
