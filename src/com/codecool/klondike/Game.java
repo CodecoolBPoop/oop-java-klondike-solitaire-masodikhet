@@ -18,6 +18,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import static com.codecool.klondike.Pile.PileType.TABLEAU;
+
 public class Game extends Pane {
 
     private List<Card> deck = new ArrayList<>();
@@ -114,6 +116,12 @@ public class Game extends Pane {
 
     public boolean isMoveValid(Card card, Pile destPile) {
         //TODO
+        if (destPile.getTopCard() != null && destPile.getPileType() == TABLEAU){
+            if (!Card.isOppositeColor(card, destPile.getTopCard())){
+                System.out.println("You can't put this card on the same color");
+                return false;
+            }
+        }
         return true;
     }
     private Pile getValidIntersectingPile(Card card, List<Pile> piles) {
@@ -139,7 +147,7 @@ public class Game extends Pane {
         if (destPile.isEmpty()) {
             if (destPile.getPileType().equals(Pile.PileType.FOUNDATION))
                 msg = String.format("Placed %s to the foundation.", card);
-            if (destPile.getPileType().equals(Pile.PileType.TABLEAU))
+            if (destPile.getPileType().equals(TABLEAU))
                 msg = String.format("Placed %s to a new pile.", card);
         } else {
             msg = String.format("Placed %s to %s.", card, destPile.getTopCard());
@@ -173,7 +181,7 @@ public class Game extends Pane {
             getChildren().add(foundationPile);
         }
         for (int i = 0; i < 7; i++) {
-            Pile tableauPile = new Pile(Pile.PileType.TABLEAU, "Tableau " + i, TABLEAU_GAP);
+            Pile tableauPile = new Pile(TABLEAU, "Tableau " + i, TABLEAU_GAP);
             tableauPile.setBlurredBackground();
             tableauPile.setLayoutX(95 + i * 180);
             tableauPile.setLayoutY(275);
