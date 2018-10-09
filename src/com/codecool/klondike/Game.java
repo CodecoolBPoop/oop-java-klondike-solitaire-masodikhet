@@ -87,7 +87,10 @@ public class Game extends Pane {
         if (pile != null) {
             handleValidMove(card, pile);
             ObservableList<Card> cards = SourcePile.getCards();
-            cards.get(cards.size()-2).flip();
+            if (SourcePile.getPileType() == TABLEAU) {
+                cards.get(cards.size()-2).flip();
+
+            }
         } else {
             draggedCards.forEach(MouseUtil::slideBack);
             draggedCards = null;
