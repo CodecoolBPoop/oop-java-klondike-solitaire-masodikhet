@@ -119,6 +119,12 @@ public class Game extends Pane {
 
     public void refillStockFromDiscard() {
         //TODO
+        Iterator<Card> discardIterator = discardPile.iterator();
+        discardIterator.forEachRemaining(card -> {
+            card.flip();
+            stockPile.addCard(card);
+        });
+        discardPile.clear();
         System.out.println("Stock refilled from discard pile.");
     }
 

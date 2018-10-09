@@ -8,6 +8,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -50,6 +51,7 @@ public class Pile extends Pane {
 
     public void clear() {
         //TODO
+        cards.clear();
     }
 
     public void addCard(Card card) {
@@ -81,6 +83,10 @@ public class Pile extends Pane {
         GaussianBlur gaussianBlur = new GaussianBlur(10);
         setBackground(background);
         setEffect(gaussianBlur);
+    }
+
+    public Iterator<Card> iterator() {
+        return getCards().iterator();
     }
 
     public enum PileType {
