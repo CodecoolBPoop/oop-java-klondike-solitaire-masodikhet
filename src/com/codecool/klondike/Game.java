@@ -104,7 +104,7 @@ public class Game extends Pane {
         //TODO
         int winInt = 0;
         for (Pile foundationPile : foundationPiles) {
-            if (foundationPile.getCards().size() == 13) {
+            if (foundationPile.numOfCards() == 13) {
                 winInt ++;
             }
         }
