@@ -109,6 +109,9 @@ public class Game extends Pane {
         //TODO
         try {
             handleValidMove(card, pile);
+            if (isGameWon()){
+                System.out.println("You won this game");
+            }
             ObservableList<Card> cards = sourcePile.getCards();
             Card flipCard =  cards.get(cards.size() - (dragSize + 1));
             if (sourcePile.getPileType() == TABLEAU && !sourcePile.isEmpty() && flipCard.isFaceDown()) {
@@ -128,7 +131,10 @@ public class Game extends Pane {
                 winInt ++;
             }
         }
-        return winInt == 4;
+        if (winInt == 4) {
+            return true;
+        }
+        return false;
     }
 
     public Game() {
@@ -190,7 +196,7 @@ public class Game extends Pane {
         }
 
         //checks opposite color and ranks on table
-        if (destPile.getTopCard() != null && destPile.getPileType() == TABLEAU){
+        if (destPile.getTopCard() != null && destPile.getPileType().equals(TABLEAU)){
             if (!Card.isOppositeColor(card, destPile.getTopCard())){
                 System.out.println("You can't put this card on the same color");
                 return false;
