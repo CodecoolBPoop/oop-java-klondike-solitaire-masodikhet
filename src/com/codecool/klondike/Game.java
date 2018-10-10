@@ -51,8 +51,15 @@ public class Game extends Pane {
         if(e.getClickCount() == 2){
             for (Pile foundationPile : foundationPiles) {
                 if (isMoveValid(card, foundationPile)) {
+                    Pile sourcePile = card.getContainingPile();
                     draggedCards.add(card);
+                    int dragSize = draggedCards.size();
                     handleValidMove(card, foundationPile);
+                    ObservableList<Card> cards = sourcePile.getCards();
+                    Card flipCard =  cards.get(cards.size() - (dragSize + 1));
+                    if (sourcePile.getPileType() == TABLEAU && !sourcePile.isEmpty() && flipCard.isFaceDown()) {
+                        flipCard.flip();
+                    }
                     break;
                 }
             }
@@ -95,16 +102,16 @@ public class Game extends Pane {
             return;
         int dragSize = draggedCards.size();
         Card card = (Card) e.getSource();
-        Pile SourcePile = card.getContainingPile();
+        Pile sourcePile = card.getContainingPile();
         List<Pile> allPiles = new ArrayList<Pile>(tableauPiles);  //added these two lines to let user place cards on foundation, not only on tableau
         allPiles.addAll(foundationPiles);
         Pile pile = getValidIntersectingPile(card, allPiles);
         //TODO
         try {
             handleValidMove(card, pile);
-            ObservableList<Card> cards = SourcePile.getCards();
+            ObservableList<Card> cards = sourcePile.getCards();
             Card flipCard =  cards.get(cards.size() - (dragSize + 1));
-            if (SourcePile.getPileType() == TABLEAU && !SourcePile.isEmpty() && flipCard.isFaceDown()) {
+            if (sourcePile.getPileType() == TABLEAU && !sourcePile.isEmpty() && flipCard.isFaceDown()) {
                 flipCard.flip();
             }
         } catch(NullPointerException f) {
