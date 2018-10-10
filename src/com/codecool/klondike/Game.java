@@ -86,6 +86,7 @@ public class Game extends Pane {
         double offsetY = e.getSceneY() - dragStartY;
 
         draggedCards.clear();
+
         for (Card currentCard : getSelectedCards(card, activePile)) {
             draggedCards.add(currentCard);
             currentCard.setTranslateX(offsetX);
@@ -119,7 +120,7 @@ public class Game extends Pane {
             }
         } catch(NullPointerException f) {
             draggedCards.forEach(MouseUtil::slideBack);
-            //draggedCards = null;
+            draggedCards.clear();
         }
     };
 
