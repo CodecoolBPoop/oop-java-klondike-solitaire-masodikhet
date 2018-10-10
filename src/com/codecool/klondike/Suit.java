@@ -10,10 +10,6 @@ public enum Suit {
     private String suitName;
 
 
-        /*public boolean isFollowedBy(Suit other){
-            return this.ordinal()+1 == other.ordinal();
-        }*/
-
     Suit(String suitName){
         this.suitName = suitName;
     }

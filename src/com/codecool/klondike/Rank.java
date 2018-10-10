@@ -6,6 +6,7 @@ public enum Rank {
 
     private int rankNumber;
 
+
     Rank(int rankNumber){this.rankNumber = rankNumber;}
 
     public int getRankNumber() {

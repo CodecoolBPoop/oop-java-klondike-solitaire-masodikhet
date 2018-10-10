@@ -136,11 +136,29 @@ public class Game extends Pane {
         System.out.println("Stock refilled from discard pile.");
     }
 
+
+    public boolean isFollowedBy(Rank card1,Rank card2){
+            return card1.ordinal()+1 == card2.ordinal();
+    }
+
+
     public boolean isMoveValid(Card card, Pile destPile) {
         //TODO
+
+        //you can only put kings on empty piles on table
+        if (destPile.isEmpty() && destPile.getPileType().equals(TABLEAU) && card.getRank() != Rank.KING){
+            System.out.println("You can only put kings on empty piles");
+            return false;
+        }
+
+        //checks opposite color and ranks on table
         if (destPile.getTopCard() != null && destPile.getPileType() == TABLEAU){
             if (!Card.isOppositeColor(card, destPile.getTopCard())){
                 System.out.println("You can't put this card on the same color");
+                return false;
+            }
+            if (!isFollowedBy(card.getRank(), destPile.getTopCard().getRank())){
+                System.out.println("Please follow the order of cards");
                 return false;
             }
         }
