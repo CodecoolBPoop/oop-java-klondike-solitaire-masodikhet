@@ -10,7 +10,7 @@ import java.util.*;
 public class Card extends ImageView {
 
     private Suit suit;
-    private int rank;
+    private Rank rank;
     private boolean faceDown;
 
     private Image backFace;
@@ -23,7 +23,7 @@ public class Card extends ImageView {
     public static final int WIDTH = 150;
     public static final int HEIGHT = 215;
 
-    public Card(Suit suit, int rank, boolean faceDown) {
+    public Card(Suit suit, Rank rank, boolean faceDown) {
         this.suit = suit;
         this.rank = rank;
         this.faceDown = faceDown;
@@ -38,16 +38,15 @@ public class Card extends ImageView {
         return suit;
     }
 
-    public int getRank() {
-        return rank;
-    }
+    public Rank getRank() { return rank; }
 
     public boolean isFaceDown() {
         return faceDown;
     }
 
     public String getShortName() {
-        return  suit + "R" + rank;
+        int rankNumber = rank.getRankNumber();
+        return  suit + "R" + rankNumber;
     }
 
     public DropShadow getDropShadow() {
@@ -106,48 +105,26 @@ public class Card extends ImageView {
     public static List<Card> createNewDeck() {
         List<Card> result = new ArrayList<>();
         for (Suit suit : Suit.values()) {
-            for (int rank = 1; rank < 14; rank++) {
+            for (Rank rank : Rank.values()) {
                 result.add(new Card(suit, rank, true));
             }
         }
         return result;
     }
-    public enum Suit {
-        HEARTS("hearts"), DIAMONDS("diamonds"), SPADES("spades"), CLUBS("clubs");
-
-        public String getName() {
-            return suitName;
-        }
-
-        private String suitName;
-
-
-        /*public boolean isFollowedBy(Suit other){
-            return this.ordinal()+1 == other.ordinal();
-        }*/
-
-        Suit(String suitName){
-            this.suitName = suitName;
-        }
-
-
-    }
-
-
     public static void loadCardImages() {
         cardBackImage = new Image("card_images/card_back.png");
         String suitName = "";
         for (Suit suit : Suit.values()) {
             suitName = suit.getName();
-            for (int rank = 1; rank < 14; rank++) {
-                String cardName = suitName + rank;
-                String cardId =  suit + "R" + rank;
+            for (Rank rank : Rank.values()) {
+                int rankNumber = rank.getRankNumber();
+                String cardName = suitName + rankNumber;
+                String cardId =  suit + "R" + rankNumber;
                 String imageFileName = "card_images/" + cardName + ".png";
                 cardFaceImages.put(cardId, new Image(imageFileName));
             }
         }
     }
-
 }
 
 
