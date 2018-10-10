@@ -9,8 +9,8 @@ import java.util.*;
 
 public class Card extends ImageView {
 
-    private int suit;
-    private int rank;
+    private Suit suit;
+    private Rank rank;
     private boolean faceDown;
 
     private Image backFace;
@@ -23,7 +23,7 @@ public class Card extends ImageView {
     public static final int WIDTH = 150;
     public static final int HEIGHT = 215;
 
-    public Card(int suit, int rank, boolean faceDown) {
+    public Card(Suit suit, Rank rank, boolean faceDown) {
         this.suit = suit;
         this.rank = rank;
         this.faceDown = faceDown;
@@ -34,20 +34,19 @@ public class Card extends ImageView {
         setEffect(dropShadow);
     }
 
-    public int getSuit() {
+    public Suit getSuit() {
         return suit;
     }
 
-    public int getRank() {
-        return rank;
-    }
+    public Rank getRank() { return rank; }
 
     public boolean isFaceDown() {
         return faceDown;
     }
 
     public String getShortName() {
-        return "S" + suit + "R" + rank;
+        int rankNumber = rank.getRankNumber();
+        return  suit + "R" + rankNumber;
     }
 
     public DropShadow getDropShadow() {
@@ -78,49 +77,54 @@ public class Card extends ImageView {
     }
 
     public static boolean isOppositeColor(Card card1, Card card2) {
-        //TODO
+        //TODO - DONE
+        ArrayList<Suit> redCards = new ArrayList<Suit>(2);
+        redCards.add(Suit.HEARTS);
+        redCards.add(Suit.DIAMONDS);
+        ArrayList<Suit> blackCards = new ArrayList<Suit>(2);
+        blackCards.add(Suit.CLUBS);
+        blackCards.add(Suit.SPADES);
+
+        Suit card1suit = card1.getSuit();
+        Suit card2suit = card2.getSuit();
+
+        if (redCards.contains(card1suit) && redCards.contains(card2suit)){
+            return false;
+        } else if (blackCards.contains(card1suit) && blackCards.contains(card2suit)){
+            return false;
+        }
         return true;
     }
 
     public static boolean isSameSuit(Card card1, Card card2) {
+        /*
+        boolean tpm = Suit.HEARTS.isFollowedBy(Suit.DIAMONDS);*/
         return card1.getSuit() == card2.getSuit();
     }
 
     public static List<Card> createNewDeck() {
         List<Card> result = new ArrayList<>();
-        for (int suit = 1; suit < 5; suit++) {
-            for (int rank = 1; rank < 14; rank++) {
+        for (Suit suit : Suit.values()) {
+            for (Rank rank : Rank.values()) {
                 result.add(new Card(suit, rank, true));
             }
         }
         return result;
     }
-
     public static void loadCardImages() {
         cardBackImage = new Image("card_images/card_back.png");
         String suitName = "";
-        for (int suit = 1; suit < 5; suit++) {
-            switch (suit) {
-                case 1:
-                    suitName = "hearts";
-                    break;
-                case 2:
-                    suitName = "diamonds";
-                    break;
-                case 3:
-                    suitName = "spades";
-                    break;
-                case 4:
-                    suitName = "clubs";
-                    break;
-            }
-            for (int rank = 1; rank < 14; rank++) {
-                String cardName = suitName + rank;
-                String cardId = "S" + suit + "R" + rank;
+        for (Suit suit : Suit.values()) {
+            suitName = suit.getName();
+            for (Rank rank : Rank.values()) {
+                int rankNumber = rank.getRankNumber();
+                String cardName = suitName + rankNumber;
+                String cardId =  suit + "R" + rankNumber;
                 String imageFileName = "card_images/" + cardName + ".png";
                 cardFaceImages.put(cardId, new Image(imageFileName));
             }
         }
     }
-
 }
+
+
