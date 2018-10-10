@@ -74,10 +74,10 @@ public class Game extends Pane {
             currentCard.setTranslateX(offsetX);
             currentCard.setTranslateY(offsetY);
             currentCard.toFront();
+            currentCard.getDropShadow().setRadius(20);
+            currentCard.getDropShadow().setOffsetX(10);
+            currentCard.getDropShadow().setOffsetY(10);
         }
-        card.getDropShadow().setRadius(20);
-        card.getDropShadow().setOffsetX(10);
-        card.getDropShadow().setOffsetY(10);
     };
 
     private EventHandler<MouseEvent> onMouseReleasedHandler = e -> {
