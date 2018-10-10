@@ -83,6 +83,7 @@ public class Game extends Pane {
     private EventHandler<MouseEvent> onMouseReleasedHandler = e -> {
         if (draggedCards.isEmpty())
             return;
+        int dragSize = draggedCards.size();
         Card card = (Card) e.getSource();
         Pile SourcePile = card.getContainingPile();
         Pile pile = getValidIntersectingPile(card, tableauPiles);
@@ -91,8 +92,7 @@ public class Game extends Pane {
             handleValidMove(card, pile);
             ObservableList<Card> cards = SourcePile.getCards();
             if (SourcePile.getPileType() == TABLEAU) {
-                cards.get(cards.size()-2).flip();
-
+                cards.get(cards.size() - (dragSize + 1)).flip();
             }
         } else {
             draggedCards.forEach(MouseUtil::slideBack);
