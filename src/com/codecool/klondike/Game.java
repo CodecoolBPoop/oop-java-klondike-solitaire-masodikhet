@@ -102,7 +102,13 @@ public class Game extends Pane {
 
     public boolean isGameWon() {
         //TODO
-        return false;
+        int winInt = 0;
+        for (Pile foundationPile : foundationPiles) {
+            if (foundationPile.getCards().size() == 13) {
+                winInt ++;
+            }
+        }
+        return winInt == 4;
     }
 
     public Game() {
