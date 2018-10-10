@@ -87,16 +87,16 @@ public class Game extends Pane {
         Pile SourcePile = card.getContainingPile();
         Pile pile = getValidIntersectingPile(card, tableauPiles);
         //TODO
-        if (pile != null) {
+        try {
             handleValidMove(card, pile);
             ObservableList<Card> cards = SourcePile.getCards();
             if (SourcePile.getPileType() == TABLEAU) {
                 cards.get(cards.size()-2).flip();
 
             }
-        } else {
+        } catch(NullPointerException f) {
             draggedCards.forEach(MouseUtil::slideBack);
-            draggedCards = null;
+            //draggedCards = null;
         }
     };
 
