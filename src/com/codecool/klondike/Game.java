@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import static com.codecool.klondike.Pile.PileType.FOUNDATION;
 import static com.codecool.klondike.Pile.PileType.TABLEAU;
 
 public class Game extends Pane {
@@ -86,7 +87,9 @@ public class Game extends Pane {
         int dragSize = draggedCards.size();
         Card card = (Card) e.getSource();
         Pile SourcePile = card.getContainingPile();
-        Pile pile = getValidIntersectingPile(card, tableauPiles);
+        List<Pile> allPiles = new ArrayList<Pile>(tableauPiles);  //added these two lines to let user place cards on foundation, not only on tableau
+        allPiles.addAll(foundationPiles);
+        Pile pile = getValidIntersectingPile(card, allPiles);
         //TODO
         try {
             handleValidMove(card, pile);
@@ -146,9 +149,27 @@ public class Game extends Pane {
     public boolean isMoveValid(Card card, Pile destPile) {
         //TODO
 
+        //you can only put the proper suit and rank on cards in foundation
+        if (destPile.getTopCard() != null && destPile.getPileType().equals(FOUNDATION)) {
+            if (!isFollowedBy(destPile.getTopCard().getRank(), card.getRank())) {
+                System.out.println("Please follow the order of cards");
+                return false;
+            }
+            if (!Card.isSameSuit(card, destPile.getTopCard())){
+                System.out.println("You can't put this card on a different suit");
+                return false;
+            }
+        }
+
+        //you can only put aces on empty piles on foundation
+        if (destPile.isEmpty() && destPile.getPileType().equals(FOUNDATION) && card.getRank() != Rank.ACE){
+            System.out.println("You can only put ACES on empty piles");
+            return false;
+        }
+
         //you can only put kings on empty piles on table
         if (destPile.isEmpty() && destPile.getPileType().equals(TABLEAU) && card.getRank() != Rank.KING){
-            System.out.println("You can only put kings on empty piles");
+            System.out.println("You can only put KINGS on empty piles");
             return false;
         }
 
