@@ -69,15 +69,15 @@ public class Game extends Pane {
         double offsetY = e.getSceneY() - dragStartY;
 
         draggedCards.clear();
-        draggedCards.add(card);
-
+        for (Card currentCard : getSelectedCards(card, activePile)) {
+            draggedCards.add(currentCard);
+            currentCard.setTranslateX(offsetX);
+            currentCard.setTranslateY(offsetY);
+            currentCard.toFront();
+        }
         card.getDropShadow().setRadius(20);
         card.getDropShadow().setOffsetX(10);
         card.getDropShadow().setOffsetY(10);
-
-        card.toFront();
-        card.setTranslateX(offsetX);
-        card.setTranslateY(offsetY);
     };
 
     private EventHandler<MouseEvent> onMouseReleasedHandler = e -> {
@@ -233,4 +233,15 @@ public class Game extends Pane {
                 BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
     }
 
+    public static List<Card> getSelectedCards( Card currentCard, Pile activePile) {
+
+        List<Card> selectedCards = new ArrayList<>();
+
+        int i = activePile.getCards().indexOf(currentCard);
+        for( int j=i; j < activePile.getCards().size(); j++) {
+            selectedCards.add( activePile.getCards().get(j));
+        }
+
+        return selectedCards;
+    }
 }
