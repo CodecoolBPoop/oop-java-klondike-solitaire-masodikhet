@@ -61,6 +61,7 @@ public class Game extends Pane {
                         flipCard.flip();
                     }
                     draggedCards.clear();
+                    autoMagicEnding();
                     break;
                 }
             }
@@ -142,7 +143,7 @@ public class Game extends Pane {
 
     public Game() {
         deck = Card.createNewDeck();
-        Collections.shuffle(deck);
+        //Collections.shuffle(deck);
         initPiles();
         dealCards();
     }
@@ -281,7 +282,7 @@ public class Game extends Pane {
 
     public void dealCards() {
         //TODO
-        for (Pile tableauPile : tableauPiles) {
+        /*for (Pile tableauPile : tableauPiles) {
             for (int i = 0;i <= tableauPiles.indexOf(tableauPile);i++) {
                 Card currentCard = deck.get(i);
                 tableauPile.addCard(currentCard);
@@ -290,7 +291,7 @@ public class Game extends Pane {
                 if (i == tableauPiles.indexOf(tableauPile)) { currentCard.flip(); }
                 deck.remove(i);
             }
-        }
+        }*/
         Iterator<Card> deckIterator = deck.iterator();
         deckIterator.forEachRemaining(card -> {
             stockPile.addCard(card);
@@ -330,15 +331,24 @@ public class Game extends Pane {
     }
 
     public void autoMagicEnding() {
+        List<Pile> pilesToCheck = new ArrayList<Pile>(tableauPiles);
+        pilesToCheck.add(discardPile);
+        Card topCard;
         if (stockPile.getCards().isEmpty() && isAllRevealed()) {
             while (!isGameWon()) {
-                for (Pile tableauPile : tableauPiles) {
-                    Card topCard = tableauPile.getTopCard();
-                    for (Pile foundationPile : foundationPiles) {
-                        if (isMoveValid(topCard, foundationPile)) {
-                            draggedCards.add(topCard);
-                            handleValidMove(topCard, foundationPile);
-                            draggedCards.clear();
+                for (Pile pileToCheck : pilesToCheck) {
+                    topCard = pileToCheck.getTopCard();
+                    if (topCard != null) {
+                        System.out.println(discardPile.getTopCard());
+                        for (Pile foundationPile : foundationPiles) {
+                            if (isMoveValid(topCard, foundationPile)) {
+                                draggedCards.add(topCard);
+                                handleValidMove(topCard, foundationPile);
+                                foundationPile.addCard(topCard);
+                                draggedCards.clear();
+                                pileToCheck.getCards().remove(topCard);
+                                break;
+                            }
                         }
                     }
                 }
