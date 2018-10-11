@@ -154,6 +154,7 @@ public class Game extends Pane {
 
     public void refillStockFromDiscard() {
         //TODO
+        Collections.reverse(discardPile.getCards());
         Iterator<Card> discardIterator = discardPile.iterator();
         discardIterator.forEachRemaining(card -> {
             card.flip();
