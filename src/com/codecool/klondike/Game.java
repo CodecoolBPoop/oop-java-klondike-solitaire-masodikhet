@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import static com.codecool.klondike.Pile.PileType.DISCARD;
 import static com.codecool.klondike.Pile.PileType.FOUNDATION;
 import static com.codecool.klondike.Pile.PileType.TABLEAU;
 
@@ -339,17 +340,25 @@ public class Game extends Pane {
         if (stockPile.getCards().isEmpty() && isAllRevealed()) {
             while (!isGameWon()) {
                 for (Pile pileToCheck : pilesToCheck) {
-                    topCard = pileToCheck.getTopCard();
-                    if (topCard != null) {
-                        System.out.println(discardPile.getTopCard());
-                        for (Pile foundationPile : foundationPiles) {
-                            if (isMoveValid(topCard, foundationPile)) {
-                                draggedCards.add(topCard);
-                                handleValidMove(topCard, foundationPile);
-                                foundationPile.addCard(topCard);
-                                draggedCards.clear();
-                                pileToCheck.getCards().remove(topCard);
-                                break;
+                    if (pileToCheck.getPileType() == DISCARD) {
+                        Iterator<Card> pileIterator = discardPile.getCards().iterator();
+                        pileIterator.forEachRemaining(card -> {
+                            for (Pile foundationPile : foundationPiles) {
+                                if (isMoveValid(card, foundationPile)) {
+                                    foundationPile.addCard(card);
+                                    pileIterator.remove();
+                                    break;
+                                }
+                            }
+                        });
+                    } else {
+                        topCard = pileToCheck.getTopCard();
+                        if (topCard != null) {
+                            for (Pile foundationPile : foundationPiles) {
+                                if (isMoveValid(topCard, foundationPile)) {
+                                    topCard.moveToPile(foundationPile);
+                                    break;
+                                }
                             }
                         }
                     }
