@@ -84,6 +84,8 @@ public class Game extends Pane {
             return;
         if (activePile.getPileType() == Pile.PileType.TABLEAU && card.isFaceDown())
             return;
+        if (activePile.getPileType() == Pile.PileType.DISCARD && card != discardPile.getTopCard())
+            return;
         double offsetX = e.getSceneX() - dragStartX;
         double offsetY = e.getSceneY() - dragStartY;
 
@@ -143,7 +145,7 @@ public class Game extends Pane {
 
     public Game() {
         deck = Card.createNewDeck();
-        //Collections.shuffle(deck);
+        Collections.shuffle(deck);
         initPiles();
         dealCards();
     }
@@ -282,7 +284,7 @@ public class Game extends Pane {
 
     public void dealCards() {
         //TODO
-        /*for (Pile tableauPile : tableauPiles) {
+        for (Pile tableauPile : tableauPiles) {
             for (int i = 0;i <= tableauPiles.indexOf(tableauPile);i++) {
                 Card currentCard = deck.get(i);
                 tableauPile.addCard(currentCard);
@@ -291,7 +293,7 @@ public class Game extends Pane {
                 if (i == tableauPiles.indexOf(tableauPile)) { currentCard.flip(); }
                 deck.remove(i);
             }
-        }*/
+        }
         Iterator<Card> deckIterator = deck.iterator();
         deckIterator.forEachRemaining(card -> {
             stockPile.addCard(card);
