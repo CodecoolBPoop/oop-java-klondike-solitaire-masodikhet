@@ -111,8 +111,8 @@ public class Card extends ImageView {
         }
         return result;
     }
-    public static void loadCardImages() {
-        cardBackImage = new Image("card_images/card_back.png");
+    public static void loadCardImages(String theme) {
+        cardBackImage = new Image(theme);
         String suitName = "";
         for (Suit suit : Suit.values()) {
             suitName = suit.getName();
@@ -125,6 +125,7 @@ public class Card extends ImageView {
             }
         }
     }
+
 }
 
 
