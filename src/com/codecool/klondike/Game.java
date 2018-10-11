@@ -50,7 +50,7 @@ public class Game extends Pane {
         }
         if(e.getClickCount() == 2){
             for (Pile foundationPile : foundationPiles) {
-                if (isMoveValid(card, foundationPile)) {
+                if (isMoveValid(card, foundationPile) && !card.isFaceDown()) {
                     Pile sourcePile = card.getContainingPile();
                     draggedCards.add(card);
                     int dragSize = draggedCards.size();
