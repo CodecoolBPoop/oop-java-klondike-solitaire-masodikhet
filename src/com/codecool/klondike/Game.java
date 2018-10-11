@@ -60,6 +60,7 @@ public class Game extends Pane {
                     if (sourcePile.getPileType() == TABLEAU && !sourcePile.isEmpty() && flipCard.isFaceDown()) {
                         flipCard.flip();
                     }
+                    draggedCards.clear();
                     break;
                 }
             }
@@ -118,6 +119,7 @@ public class Game extends Pane {
             if (sourcePile.getPileType() == TABLEAU && !sourcePile.isEmpty() && flipCard.isFaceDown()) {
                 flipCard.flip();
             }
+            autoMagicEnding();
         } catch(NullPointerException f) {
             draggedCards.forEach(MouseUtil::slideBack);
             draggedCards.clear();
@@ -154,6 +156,7 @@ public class Game extends Pane {
 
     public void refillStockFromDiscard() {
         //TODO
+        stockPile.clear();
         Collections.reverse(discardPile.getCards());
         Iterator<Card> discardIterator = discardPile.iterator();
         discardIterator.forEachRemaining(card -> {
@@ -313,5 +316,33 @@ public class Game extends Pane {
         }
 
         return selectedCards;
+    }
+
+    public boolean isAllRevealed() {
+        for (Pile tableauPile : tableauPiles) {
+            for (Card card : tableauPile.getCards()) {
+                if (card.isFaceDown()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public void autoMagicEnding() {
+        if (stockPile.getCards().isEmpty() && isAllRevealed()) {
+            while (!isGameWon()) {
+                for (Pile tableauPile : tableauPiles) {
+                    Card topCard = tableauPile.getTopCard();
+                    for (Pile foundationPile : foundationPiles) {
+                        if (isMoveValid(topCard, foundationPile)) {
+                            draggedCards.add(topCard);
+                            handleValidMove(topCard, foundationPile);
+                            draggedCards.clear();
+                        }
+                    }
+                }
+            }
+        }
     }
 }
